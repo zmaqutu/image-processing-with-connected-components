@@ -1,0 +1,6 @@
+# ignore binary files
+/build/*.exe
+/src/*.o
+tag.txt
+*.pdf
+MQTZON001_Assignment1.tar.gz
