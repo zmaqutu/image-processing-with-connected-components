@@ -5,17 +5,27 @@
 #include <vector>
 #include <sstream>
 #include <unordered_map>
-#include "frameSequence.h"
+#include "PGMimageProcessor.h"
 
 namespace MQTZON001 {
+	int pixelCount;
+	int id;
 
-		int length;
-                int width;
-                int height;
-		frameSequence::frameSequence(int len, int wid,  int hei){				//constructor
-			length = len;
-			width = wid;
-			height = hei;
-		}
-
+	void PGMimageProcessor(int id){
+		pixelCount = 0;
+		this.id = setId(id);
+	}
+	~PGMimageProcessor(){
+		std::cout << "Container Destroyed " << std::endl;
+	}
+		private:
+	int PGMimageProcessor::getId(){
+		return id;
+	}
+	int PGMimageProcessor::getPixelCount(){
+		return pixelCount;
+	}
+	void PGMimageProcessor::setId(int containerId){
+		this.id = containerId;
+	}
 }
