@@ -6,15 +6,19 @@
 namespace MQTZON001{
 	class PGMimageProcessor {
 		private:
-                        int componentCount;
-                        int id;
+			std::string fileName;
+			unsigned char ** imageArray;
+			int rows, cols;
+			int componentCount;
                 public:
-			PGMimageProcessor(int id);
+			PGMimageProcessor(void);
+			PGMimageProcessor(std::string imageFileName);
 			~PGMimageProcessor();
-			int getId();
+			int getRows();
+			int getCols();
 			int getComponentCount(void) const;
-			void setId(int no);
-			void read_from_file(std::string fileName);
+			//void setId(int no);
+			void read_from_file();
 			int extractComponents(unsigned char threshold, int minValidSize);
 			int filterComponentsBySize(int minSize, int maxSize);
 			bool writeComponents(const std::string & outFileName);

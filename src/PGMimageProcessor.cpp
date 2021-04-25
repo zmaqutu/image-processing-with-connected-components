@@ -7,26 +7,42 @@
 #include "PGMimageProcessor.h"
 
 namespace MQTZON001 {
-	PGMimageProcessor::PGMimageProcessor(int id){
-		componentCount = 0;
-		setId(id);
+	//default constructor
+	PGMimageProcessor::PGMimageProcessor(void)
+		:fileName(""),imageArray(nullptr),rows(0),cols(0),componentCount(0)
+	{
 	}
+	//other constructor
+	PGMimageProcessor::PGMimageProcessor(std::string imageFileName) 
+		: fileName(imageFileName),imageArray(nullptr),rows(0),cols(0),componentCount(0)
+	{
+		read_from_file();
+	}
+	//destructor
 	PGMimageProcessor::~PGMimageProcessor(){
+		if(imageArray != nullptr){
+			for(int i = 0; i < rows;i++){
+				delete [] imageArray[i];
+			}
+		}
+		delete [] imageArray;
 		std::cout << "Container Destroyed " << std::endl;
 	}
-	int PGMimageProcessor::getId(){
-		return id;
+	int PGMimageProcessor::getRows(){
+		return rows;
+	}
+	int PGMimageProcessor::getCols(){
+		return cols;
 	}
 	int PGMimageProcessor::getComponentCount(void) const {
 		return componentCount;
 	}
-	void PGMimageProcessor::setId(int containerId){
+	/*void PGMimageProcessor::setId(int containerId){
 		id = containerId;
-	}
-	void PGMimageProcessor::read_from_file(std::string fileName){
-		std::ifstream file("data/baboon.pgm", std::ios::binary);
+	}*/
+	void PGMimageProcessor::read_from_file(){
+		std::ifstream file(fileName, std::ios::binary);
 		std::string line;
-		int rows, cols;
 
 		std::getline(file,line);					//read P5
 		//skip through comments
@@ -43,7 +59,7 @@ namespace MQTZON001 {
 		std::cout << rows << "," << cols << std::endl;
 
 		std::getline(file,line);					//read 255
-		unsigned char **imageArray = new unsigned char*[rows];
+		imageArray = new unsigned char*[rows];
 		for(int i = 0; i < rows;i++){
 			imageArray[i] = new unsigned char[cols];
 		}
