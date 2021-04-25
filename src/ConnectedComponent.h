@@ -16,6 +16,8 @@ namespace MQTZON001{
 			~ConnectedComponent();
 			ConnectedComponent(const ConnectedComponent & rhs);
 			ConnectedComponent(ConnectedComponent && rhs);
+			ConnectedComponent & operator=(const ConnectedComponent & rhs);
+			ConnectedComponent & operator=(ConnectedComponent && rhs);
 			int getComponentId();
 			int getPixelCount(void) const;
 			void setPixelCount(void) const;
