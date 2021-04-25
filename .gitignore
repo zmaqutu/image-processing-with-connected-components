@@ -1,5 +1,5 @@
 # ignore binary files
-/build/driver
+/build/findComp
 /src/*.o
 tag.txt
 *.pdf
