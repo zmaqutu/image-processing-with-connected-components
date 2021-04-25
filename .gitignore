@@ -1,5 +1,5 @@
 # ignore binary files
-/build/*.exe
+/build/driver
 /src/*.o
 tag.txt
 *.pdf

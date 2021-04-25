@@ -5,10 +5,14 @@
 namespace MQTZON001{
 	class PGMimageProcessor {
 		private:
-                public:
                         int pixelCount;
                         int id;
+                public:
 			PGMimageProcessor(int id);
+			~PGMimageProcessor();
+			int getId();
+			int getPixelCount();
+			void setId(int no);
 	};
 }
 #endif

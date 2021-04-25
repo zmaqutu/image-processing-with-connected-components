@@ -8,17 +8,13 @@
 #include "PGMimageProcessor.h"
 
 namespace MQTZON001 {
-	int pixelCount;
-	int id;
-
-	void PGMimageProcessor(int id){
+	PGMimageProcessor::PGMimageProcessor(int id){
 		pixelCount = 0;
-		this.id = setId(id);
+		setId(id);
 	}
-	~PGMimageProcessor(){
+	PGMimageProcessor::~PGMimageProcessor(){
 		std::cout << "Container Destroyed " << std::endl;
 	}
-		private:
 	int PGMimageProcessor::getId(){
 		return id;
 	}
@@ -26,6 +22,6 @@ namespace MQTZON001 {
 		return pixelCount;
 	}
 	void PGMimageProcessor::setId(int containerId){
-		this.id = containerId;
+		id = containerId;
 	}
 }
