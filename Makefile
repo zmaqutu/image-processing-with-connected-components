@@ -13,7 +13,7 @@ OBJECTS=$(SOURCES:.cpp=.o)
 
 
 default: $(OBJECTS)
-	$(CC)  $(SOURCES) -o build/driver -std=c++2a -Wall
+	$(CC)  $(SOURCES) -o build/findComp -std=c++2a -Wall
 #	echo "Compiled Successfully. Exe file in build folder"
 #	sudo cp $(SRCDIR)/*.o /$(BINDIR)
 #	$<
@@ -24,7 +24,7 @@ default: $(OBJECTS)
 # deletes all the object code files
 clean:
 	@rm -f $(SRCDIR)/*.o
-	@rm $(BLDDIR)/driver
+	@rm $(BLDDIR)/findComp
    
 # copies/moves the relevant binaries and/or libraries to the correct folders   
 install:

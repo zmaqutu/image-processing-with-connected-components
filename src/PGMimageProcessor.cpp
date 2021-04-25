@@ -24,7 +24,26 @@ namespace MQTZON001 {
 		id = containerId;
 	}
 	void PGMimageProcessor::read_from_file(std::string fileName){
-		std::cout << fileName << std::endl;
+		std::ifstream file("data/sloan_image.pgm");
+		std::string line;
+		int rows, cols;
+
+		std::getline(file,line);					//read P5
+		//skip through comments
+		while(std::getline(file,line)){
+			if(line[0] != '#'){
+				break;
+			}
+		}
+		//get rows and cols from next line using split
+		std::istringstream iss(line);
+		iss >> rows;
+		iss >> cols;
+
+		std::cout << rows << "," << cols << std::endl;
+
+		std::getline(file,line);					//read 255
+
 	}
 	int PGMimageProcessor::extractComponents(unsigned char threshold, int minValidSize){
 		std::cout << threshold << std::endl;
