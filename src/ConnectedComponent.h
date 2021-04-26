@@ -12,7 +12,7 @@ namespace MQTZON001{
 			//a way to store pixels in this component an unordered set or pairs
 			std::unordered_set<std::pair<int,int>,boost::hash<std::pair<int, int>>> pixelIndexes;
                 public:
-			ConnectedComponent(int id);
+			ConnectedComponent(int id, int xStart, int yStart);
 			~ConnectedComponent();
 			ConnectedComponent(const ConnectedComponent & rhs);
 			ConnectedComponent(ConnectedComponent && rhs);
@@ -20,7 +20,7 @@ namespace MQTZON001{
 			ConnectedComponent & operator=(ConnectedComponent && rhs);
 			int getComponentId();
 			int getPixelCount(void) const;
-			void setPixelCount(void) const;
+			void setPixelCount(int);
 			void setComponentId(int no);
 	};
 }

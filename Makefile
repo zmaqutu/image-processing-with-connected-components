@@ -8,7 +8,7 @@ BINDIR=bin
 INCDIR=include
 BLDDIR=build
 
-SOURCES = src/driver.cpp $(SRCDIR)/PGMimageProcessor.cpp
+SOURCES = src/driver.cpp $(SRCDIR)/PGMimageProcessor.cpp $(SRCDIR)/ConnectedComponent.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 
 

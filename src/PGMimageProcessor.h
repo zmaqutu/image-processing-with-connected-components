@@ -6,7 +6,7 @@
 #define PGMimageProcessor_H
 
 namespace MQTZON001{
-	class PGMimageProcessor {
+	class PGMimageProcessor{
 		private:
 			std::string fileName;
 			unsigned char ** imageArray;

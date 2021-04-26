@@ -3,13 +3,15 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-#include <unordered_map>
 #include "ConnectedComponent.h"
 
 namespace MQTZON001 {
-	ConnectedComponent::ConnectedComponent(int id)
-		:componentId(id),pixelCount(0)
+	/*ConnectedComponent::ConnectedComponent(){
+	}*/
+	ConnectedComponent::ConnectedComponent(int id,int xStart,int yStart)
+		:componentId(id),pixelCount(1)
 	{
+		pixelIndexes.insert({xStart,yStart});
 	}
 	//destructor
 	ConnectedComponent::~ConnectedComponent(){
@@ -29,7 +31,7 @@ namespace MQTZON001 {
 	{
 	}
 	//copy assignment operator overload
-	ConnectedComponent & operator=(const ConnectedComponent & rhs){
+	ConnectedComponent & ConnectedComponent::operator=(const ConnectedComponent & rhs){
 		if(this != &rhs){
 			componentId = rhs.componentId;
 			pixelCount = rhs.pixelCount;
@@ -38,14 +40,15 @@ namespace MQTZON001 {
 			//release resources by deleting
 			//assign resources tho "this" variables
 		}
+		return *this;
 	}
 	//move assignment operator overload
-	ConnectedComonent & operator=(ConnectedComponet && rhs){
+	ConnectedComponent & ConnectedComponent::operator=(ConnectedComponent && rhs){
 		if(this != &rhs){
 			pixelIndexes.clear();				//make sure its not pointing to anything before writing to it
 			pixelIndexes = std::move(rhs.pixelIndexes);
 			setComponentId(0);				//release the resource set it to point to nothing
-			setPixelCount(0)
+			setPixelCount(0);
 			//add delete to free up where the current set is pointing to
 			componentId = rhs.componentId;
 			pixelCount = rhs.pixelCount;
@@ -53,13 +56,13 @@ namespace MQTZON001 {
 		}
 		return *this;
 	}
-	int ConnectedComponent::getId(){
+	int ConnectedComponent::getComponentId(){
 		return componentId;
 	}
 	int ConnectedComponent::getPixelCount(void) const {
 		return pixelCount;
 	}
-	void ConnectedComponent::setPixelCount(int count) const{
+	void ConnectedComponent::setPixelCount(int count){
 		pixelCount = count;
 	}
 	void ConnectedComponent::setComponentId(int containerId){

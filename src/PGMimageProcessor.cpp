@@ -3,7 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-#include <unordered_map>
+#include <unordered_set>
 #include "PGMimageProcessor.h"
 
 namespace MQTZON001 {
@@ -132,7 +132,8 @@ namespace MQTZON001 {
 		visited[xPosition][yPosition] = 1;
 		distance[xPosition][yPosition] = 0;
 		//TODO create a connectedComponent
-		ConnectedComponent component();
+		componentCount++;
+		ConnectedComponent component(componentCount,xPosition,yPosition);
 
 		while(!pixelQueue.empty()){
 			int currentX = pixelQueue.front().first;		//returns the x value in the pair at the front of queue
