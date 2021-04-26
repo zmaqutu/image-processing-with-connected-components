@@ -9,13 +9,28 @@
 namespace MQTZON001 {
 	//default constructor
 	PGMimageProcessor::PGMimageProcessor(void)
-		:fileName(""),imageArray(nullptr),rows(0),cols(0),componentCount(0)
+		:fileName(""),imageArray(nullptr),rows(0),cols(0),componentCount(0),distance(nullptr),visited(nullptr)
+		 ,dx(new int[4]),dy(new int[4])
 	{
+		//dx = {-1,0,1,0};
+		dx[0] = -1;
+		dx[1] = 0;
+		dx[2] = 1;
+		dx[3] = 0;
+
+		//dy = {0,1,0,-1};
+		dx[0] = 0;
+		dx[1] = 1;
+		dx[2] = 0;
+                dx[3] = -1;
 	}
 	//other constructor
 	PGMimageProcessor::PGMimageProcessor(std::string imageFileName) 
-		: fileName(imageFileName),imageArray(nullptr),rows(0),cols(0),componentCount(0)
+		: fileName(imageFileName),imageArray(nullptr),rows(0),cols(0),componentCount(0),distance(nullptr),visited(nullptr)
+		  ,dx(new int[4]),dy(new int[4])
 	{
+		//dx = {-1,0,1,0};
+                //dy = {0,1,0,-1};
 		read_from_file();
 	}
 	//destructor
@@ -56,12 +71,17 @@ namespace MQTZON001 {
 		iss >> rows;
 		iss >> cols;
 
+		//std::unique_ptr<std::unique_ptr<int[]> d(new std::unique_ptr<int[]>[rows]);
+		//visited(new std::unique_ptr<int[]>[rows]);
+
 		std::cout << rows << "," << cols << std::endl;
 
 		std::getline(file,line);					//read 255
 		imageArray = new unsigned char*[rows];
 		for(int i = 0; i < rows;i++){
 			imageArray[i] = new unsigned char[cols];
+			distance[i] = new int[cols];
+			visited[i] = new int[cols];
 		}
 		while(file){
 			for(int i = 0; i < rows;i++){
@@ -90,7 +110,44 @@ namespace MQTZON001 {
 	}
 	int PGMimageProcessor::extractComponents(unsigned char threshold, int minValidSize){
 		std::cout << threshold << std::endl;
+		for(int y = 0; y < rows; y++){
+			for(int x = 0; x < cols; x++){
+				std::pair<int,int> position(y,x);
+				if(imageArray[x][y] >= threshold && allForegroundPixels.find(position) == allForegroundPixels.end()){
+					//bfsAdd(x,y);		//this applies bfs starting from location y,x 
+				}
+			}
+		}
 		return -1;
+	}
+	//this method applies bfs and adds each foreground pixel found to a set
+	void PGMimageProcessor::bfsAdd(int xPosition, int yPosition){
+		std::queue<std::pair<int,int>> pixelQueue;
+		pixelQueue.push({xPosition,yPosition});
+
+		visited[xPosition][yPosition] = 1;
+		distance[xPosition][yPosition] = 0;
+
+		while(!pixelQueue.empty()){
+			int currentX = pixelQueue.front().first;		//returns the x value in the pair at the front of queue
+			int currentY = pixelQueue.front().second;		//returns the y value in the pair at the front of queue
+
+			pixelQueue.pop();
+			for(int i = 0; i < 4;i++){
+				if(isValidPixel(currentX + dx[i],currentY + dy[i])){
+					int nextX = currentX + dx[i];
+					int nextY = currentY + dy[i];
+
+					pixelQueue.push({nextX,nextY});
+					visited[nextX][nextY] = 1;
+					distance[nextX][nextY] = distance[currentX][currentY] + 1;
+				}
+			}
+		}
+		return;
+	}
+	bool PGMimageProcessor::isValidPixel(int xPosition,int yPosition){
+		return true;
 	}
 	int PGMimageProcessor::filterComponentsBySize(int minSize, int maxSize){
 		std::cout << minSize << std::endl;
