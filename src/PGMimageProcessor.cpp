@@ -77,7 +77,10 @@ namespace MQTZON001 {
 		std::cout << rows << "," << cols << std::endl;
 
 		std::getline(file,line);					//read 255
-		imageArray = new unsigned char*[rows];
+		//TODO change these 2D arrays to use smart pointers
+		imageArray = new unsigned char*[rows];				
+		distance = new  int*[rows];
+		visited = new int*[rows];
 		for(int i = 0; i < rows;i++){
 			imageArray[i] = new unsigned char[cols];
 			distance[i] = new int[cols];
@@ -113,10 +116,11 @@ namespace MQTZON001 {
 		for(int y = 0; y < rows; y++){
 			for(int x = 0; x < cols; x++){
 				std::pair<int,int> position(y,x);
-				if(imageArray[x][y] >= threshold && allForegroundPixels.find(position) == allForegroundPixels.end()){
+				if(imageArray[x][y] >= threshold && visited[x][y] == 0){
 					//bfsAdd(x,y);		//this applies bfs starting from location y,x 
 				}
 			}
+			//TODO free the space the image is occupying
 		}
 		return -1;
 	}
@@ -127,6 +131,8 @@ namespace MQTZON001 {
 
 		visited[xPosition][yPosition] = 1;
 		distance[xPosition][yPosition] = 0;
+		//TODO create a connectedComponent
+		ConnectedComponent component();
 
 		while(!pixelQueue.empty()){
 			int currentX = pixelQueue.front().first;		//returns the x value in the pair at the front of queue
@@ -140,10 +146,12 @@ namespace MQTZON001 {
 
 					pixelQueue.push({nextX,nextY});
 					visited[nextX][nextY] = 1;
+					//TODO add x and y to set then add set will be moved to connectedComponent after loop terminates
 					distance[nextX][nextY] = distance[currentX][currentY] + 1;
 				}
 			}
 		}
+		//TODO add connectedComponent to container of connectedComponents
 		return;
 	}
 	bool PGMimageProcessor::isValidPixel(int xPosition,int yPosition){
