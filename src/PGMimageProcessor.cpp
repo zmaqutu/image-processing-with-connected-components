@@ -119,17 +119,20 @@ namespace MQTZON001 {
 		outputFile << "255" << std::endl;
 
 		for(int row = 0; row < rows; row++){
+			/*for(int col = 0; col < cols;col++){
+				if(imageArray[row][col] >= threshold){
+					outputFile << 255;
+				}
+				else{
+					outputFile << 0;
+				}
+			}*/
 			outputFile.write((char*)imageArray[row],cols);
 		}
 		outputFile.close();
 
-		extractComponents(128,20);
+		extractComponents(180,20);
 		std::cout << "There are " << components.size() << " components"<< std::endl;
-		for(unsigned int i = 0; i < components.size();i++){
-			if(components[i].getPixelCount() > 1){
-				std::cout << "There are " << components[i].getPixelCount() << " pixels"<< std::endl;
-			}
-		}
 
 
 	}
@@ -137,13 +140,30 @@ namespace MQTZON001 {
 		std::cout << threshold << std::endl;
 		for(int row = 0; row < rows; row++){
 			for(int col = 0; col < cols; col++){
-				//std::pair<int,int> position(y,x);
 				if(isValidPixel(row,col,threshold)){
 					bfsAdd(row,col,threshold);		//this applies bfs starting from location y,x 
 				}
 			}
 			//TODO free the space the image is occupying
 		}
+		std::ofstream outputFile("dump_files/output.pgm", std::ios::binary);
+
+                outputFile << "P5" << std::endl;
+                outputFile << rows << " " << cols << std::endl;
+                outputFile << "255" << std::endl;
+
+                for(int row = 0; row < rows; row++){
+                        for(int col = 0; col < cols;col++){
+                                if(imageArray[row][col] >= threshold){
+                                        outputFile << (unsigned char)255;
+                                }       
+                                else{
+                                        outputFile << (unsigned char)0; 
+                                }       
+                        }       
+                        //outputFile.write((char*)imageArray[row],cols);
+                }
+                outputFile.close();
 		return -1;
 	}
 	//this method applies bfs and adds each foreground pixel found to a set
@@ -180,14 +200,8 @@ namespace MQTZON001 {
 				}
 			}
 		}
-		//TODO add connectedComponent to container of connectedComponents
+		//add connectedComponent to container of connectedComponents
 		components.push_back(component);
-		//std::cout << components.size() << " components now" << std::endl;
-		/*for(unsigned int i = 0; i < components.size(); ++i){
-			if(components[i].getPixelCount() > 1){
-				std::cout << components[i].getPixelCount() << " pixels in here" << std::endl;
-			}
-		}*/
 		return;
 	}
 	bool PGMimageProcessor::isValidPixel(int row,int col, unsigned char threshold){

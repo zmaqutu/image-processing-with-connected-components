@@ -17,8 +17,8 @@ namespace MQTZON001 {
 	//destructor
 	ConnectedComponent::~ConnectedComponent(){
 		pixelIndexes.clear();
-		//setPixelCount(0);
-		//setComponentId(0);
+		setPixelCount(-1);
+		setComponentId(-1);
 		//std::cout << "Component Destroyed " << std::endl;
 	}
 	//copy constructor
@@ -59,10 +59,7 @@ namespace MQTZON001 {
 	}
 	void ConnectedComponent::addPixel(int row, int col){
 		pixelIndexes.insert({row,col});
-		//setPixelCount(pixelIndexes.size());
 		pixelCount++;
-		std::cout << "added a pixel to component " << componentId << std::endl;
-		//MQTZON001::ConnectedComponent::pixelCount++;
 	}
 	int ConnectedComponent::getComponentId(){
 		return componentId;
