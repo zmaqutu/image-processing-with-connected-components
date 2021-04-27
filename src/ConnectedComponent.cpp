@@ -8,17 +8,18 @@
 namespace MQTZON001 {
 	/*ConnectedComponent::ConnectedComponent(){
 	}*/
-	ConnectedComponent::ConnectedComponent(int id,int xStart,int yStart)
-		:componentId(id),pixelCount(1)
+	ConnectedComponent::ConnectedComponent(int id,int startRow,int startCol)
+		:componentId(id),pixelCount(0)
 	{
-		pixelIndexes.insert({xStart,yStart});
+		pixelIndexes.insert({startRow,startCol});
+		pixelCount++;
 	}
 	//destructor
 	ConnectedComponent::~ConnectedComponent(){
 		pixelIndexes.clear();
-		setPixelCount(0);
-		setComponentId(0);
-		std::cout << "Component Destroyed " << std::endl;
+		//setPixelCount(0);
+		//setComponentId(0);
+		//std::cout << "Component Destroyed " << std::endl;
 	}
 	//copy constructor
 	ConnectedComponent::ConnectedComponent(const ConnectedComponent & rhs)
@@ -56,14 +57,24 @@ namespace MQTZON001 {
 		}
 		return *this;
 	}
+	void ConnectedComponent::addPixel(int row, int col){
+		pixelIndexes.insert({row,col});
+		//setPixelCount(pixelIndexes.size());
+		pixelCount++;
+		std::cout << "added a pixel to component " << componentId << std::endl;
+		//MQTZON001::ConnectedComponent::pixelCount++;
+	}
 	int ConnectedComponent::getComponentId(){
 		return componentId;
 	}
-	int ConnectedComponent::getPixelCount(void) const {
+	int ConnectedComponent::getPixelCount(void){
 		return pixelCount;
 	}
 	void ConnectedComponent::setPixelCount(int count){
 		pixelCount = count;
+	}
+	void ConnectedComponent::incrementPixelCount(void){
+		pixelCount++;
 	}
 	void ConnectedComponent::setComponentId(int containerId){
 		componentId = containerId;

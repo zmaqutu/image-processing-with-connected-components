@@ -17,6 +17,7 @@ namespace MQTZON001{
 			//std::unique_ptr<std::unique_ptr<int[]>[]> visited;
 			int ** distance;
 			int ** visited;
+			std::vector<ConnectedComponent> components;
 
 			std::unique_ptr<int[]> dx;
 			std::unique_ptr<int[]> dy;
@@ -31,8 +32,8 @@ namespace MQTZON001{
 			//void setId(int no);
 			void read_from_file();
 			int extractComponents(unsigned char threshold, int minValidSize);
-			void bfsAdd(int xPosition, int yPosition);
-			bool isValidPixel(int xPosition, int yPosition);
+			void bfsAdd(int xPosition, int yPosition, unsigned char threshold);
+			bool isValidPixel(int xPosition, int yPosition, unsigned char theshold);
 			int filterComponentsBySize(int minSize, int maxSize);
 			bool writeComponents(const std::string & outFileName);
 			int getLargestSize(void) const;

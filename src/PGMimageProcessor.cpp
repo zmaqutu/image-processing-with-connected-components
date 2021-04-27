@@ -19,10 +19,10 @@ namespace MQTZON001 {
 		dx[3] = 0;
 
 		//dy = {0,1,0,-1};
-		dx[0] = 0;
-		dx[1] = 1;
-		dx[2] = 0;
-                dx[3] = -1;
+		dy[0] = 0;
+		dy[1] = 1;
+		dy[2] = 0;
+                dy[3] = -1;
 	}
 	//other constructor
 	PGMimageProcessor::PGMimageProcessor(std::string imageFileName) 
@@ -31,6 +31,17 @@ namespace MQTZON001 {
 	{
 		//dx = {-1,0,1,0};
                 //dy = {0,1,0,-1};
+		//dx = {-1,0,1,0};
+                dx[0] = -1;
+                dx[1] = 0;
+                dx[2] = 1;
+                dx[3] = 0;
+
+                //dy = {0,1,0,-1};
+                dy[0] = 0;
+                dy[1] = 1;
+                dy[2] = 0;
+                dy[3] = -1;
 		read_from_file();
 	}
 	//destructor
@@ -82,18 +93,21 @@ namespace MQTZON001 {
 		distance = new  int*[rows];
 		visited = new int*[rows];
 		for(int i = 0; i < rows;i++){
-			imageArray[i] = new unsigned char[cols];
+			imageArray[i] = new unsigned char[cols];		//for each of the rows add cols
 			distance[i] = new int[cols];
 			visited[i] = new int[cols];
 		}
 		while(file){
-			for(int i = 0; i < rows;i++){
+			for(int i = 0; i < rows;i++){				//fils each row with cols read from file
 				file.read((char*)imageArray[i],cols);
 			}
 		}
 		for(int x = 0; x < 5;x++){
 			for(int y = 0; y < 5; y++){
-				std::cout << imageArray[x][y] << std::endl;
+				//std::cout << imageArray[y][x] << std::endl;
+				std::cout << distance[x][y] << std::endl;
+
+
 			}
 		}
 		file.close();
@@ -104,20 +118,28 @@ namespace MQTZON001 {
 		outputFile << rows << " " << cols << std::endl;
 		outputFile << "255" << std::endl;
 
-		for(int x = 0; x < rows; x++){
-			outputFile.write((char*)imageArray[x],cols);
+		for(int row = 0; row < rows; row++){
+			outputFile.write((char*)imageArray[row],cols);
 		}
 		outputFile.close();
+
+		extractComponents(128,20);
+		std::cout << "There are " << components.size() << " components"<< std::endl;
+		for(unsigned int i = 0; i < components.size();i++){
+			if(components[i].getPixelCount() > 1){
+				std::cout << "There are " << components[i].getPixelCount() << " pixels"<< std::endl;
+			}
+		}
 
 
 	}
 	int PGMimageProcessor::extractComponents(unsigned char threshold, int minValidSize){
 		std::cout << threshold << std::endl;
-		for(int y = 0; y < rows; y++){
-			for(int x = 0; x < cols; x++){
-				std::pair<int,int> position(y,x);
-				if(imageArray[x][y] >= threshold && visited[x][y] == 0){
-					//bfsAdd(x,y);		//this applies bfs starting from location y,x 
+		for(int row = 0; row < rows; row++){
+			for(int col = 0; col < cols; col++){
+				//std::pair<int,int> position(y,x);
+				if(isValidPixel(row,col,threshold)){
+					bfsAdd(row,col,threshold);		//this applies bfs starting from location y,x 
 				}
 			}
 			//TODO free the space the image is occupying
@@ -125,37 +147,56 @@ namespace MQTZON001 {
 		return -1;
 	}
 	//this method applies bfs and adds each foreground pixel found to a set
-	void PGMimageProcessor::bfsAdd(int xPosition, int yPosition){
+	void PGMimageProcessor::bfsAdd(int row, int col, unsigned char threshold){
 		std::queue<std::pair<int,int>> pixelQueue;
-		pixelQueue.push({xPosition,yPosition});
+		pixelQueue.push({row,col});					//points are row,col not x,y
 
-		visited[xPosition][yPosition] = 1;
-		distance[xPosition][yPosition] = 0;
+		visited[row][col] = 1;
+		distance[row][col] = 0;
 		//TODO create a connectedComponent
 		componentCount++;
-		ConnectedComponent component(componentCount,xPosition,yPosition);
+		//ConnectedComponent component(componentCount,row,col);
+		ConnectedComponent component = ConnectedComponent(componentCount,row,col);
+
 
 		while(!pixelQueue.empty()){
-			int currentX = pixelQueue.front().first;		//returns the x value in the pair at the front of queue
-			int currentY = pixelQueue.front().second;		//returns the y value in the pair at the front of queue
+			int currentRow = pixelQueue.front().first;		//returns the x value in the pair at the front of queue
+			int currentCol = pixelQueue.front().second;		//returns the y value in the pair at the front of queue
 
 			pixelQueue.pop();
 			for(int i = 0; i < 4;i++){
-				if(isValidPixel(currentX + dx[i],currentY + dy[i])){
-					int nextX = currentX + dx[i];
-					int nextY = currentY + dy[i];
+				//dx = {-1,0,1,0};
+				//dy = {0,1,0,-1};
+				if(isValidPixel(currentRow + dy[i],currentCol + dx[i],threshold)){
+					int nextRow = currentRow + dy[i];
+					int nextCol = currentCol + dx[i];
 
-					pixelQueue.push({nextX,nextY});
-					visited[nextX][nextY] = 1;
+					pixelQueue.push({nextRow,nextCol});
+					//visited[currentRow][currentCol] = 1;
+					visited[nextRow][nextCol] = 1;
 					//TODO add x and y to set then add set will be moved to connectedComponent after loop terminates
-					distance[nextX][nextY] = distance[currentX][currentY] + 1;
+					distance[nextRow][nextCol] = distance[currentRow][currentCol] + 1;
+					component.addPixel(currentRow,currentCol);
 				}
 			}
 		}
 		//TODO add connectedComponent to container of connectedComponents
+		components.push_back(component);
+		//std::cout << components.size() << " components now" << std::endl;
+		/*for(unsigned int i = 0; i < components.size(); ++i){
+			if(components[i].getPixelCount() > 1){
+				std::cout << components[i].getPixelCount() << " pixels in here" << std::endl;
+			}
+		}*/
 		return;
 	}
-	bool PGMimageProcessor::isValidPixel(int xPosition,int yPosition){
+	bool PGMimageProcessor::isValidPixel(int row,int col, unsigned char threshold){
+		if(row < 0 || row > rows-1 || col < 0 || col > cols-1 || imageArray[row][col] < threshold) return false;
+		
+		if(visited[row][col] == 1) return false;
+
+		std::cout<< (int)imageArray[row][col] << std::endl;
+		
 		return true;
 	}
 	int PGMimageProcessor::filterComponentsBySize(int minSize, int maxSize){
