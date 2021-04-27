@@ -7,10 +7,11 @@
 namespace MQTZON001{
 	class ConnectedComponent {
 		private: 
-                        int componentId;
+	        int componentId;
 			int pixelCount;
 			//a way to store pixels in this component an unordered set or pairs
-			std::unordered_set<std::pair<int,int>,boost::hash<std::pair<int, int>>> pixelIndexes;
+			//std::unordered_set<std::pair<int,int>,boost::hash<std::pair<int, int>>> pixelIndexes;
+			std::vector<std::pair<int,int>> pixelIndexes;
                 public:
 			ConnectedComponent(int id, int startRow, int startCol);
 			~ConnectedComponent();
@@ -19,6 +20,7 @@ namespace MQTZON001{
 			ConnectedComponent & operator=(const ConnectedComponent & rhs);
 			ConnectedComponent & operator=(ConnectedComponent && rhs);
 			void addPixel(int x,int y);
+            void writeToFile(std::ofstream & outputFile);
 			int getComponentId();
 			int getPixelCount(void);
 			void setPixelCount(int);

@@ -11,7 +11,7 @@ namespace MQTZON001 {
 	ConnectedComponent::ConnectedComponent(int id,int startRow,int startCol)
 		:componentId(id),pixelCount(0)
 	{
-		pixelIndexes.insert({startRow,startCol});
+		pixelIndexes.push_back({startRow,startCol});
 		pixelCount++;
 	}
 	//destructor
@@ -58,8 +58,15 @@ namespace MQTZON001 {
 		return *this;
 	}
 	void ConnectedComponent::addPixel(int row, int col){
-		pixelIndexes.insert({row,col});
+		pixelIndexes.push_back({row,col});
 		pixelCount++;
+	}
+	void ConnectedComponent::writeToFile(std::ofstream & outputFile){
+        //outputFile("dump_files/connectedComponents.pgm", std::ios::binary);
+	    std::cout << "Entering writeToFile" << std::endl;
+        for(std::pair<int,int> pixelPair : pixelIndexes){
+            	outputFile << (unsigned char)255;
+	    }
 	}
 	int ConnectedComponent::getComponentId(){
 		return componentId;

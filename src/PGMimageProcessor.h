@@ -35,7 +35,7 @@ namespace MQTZON001{
 			void bfsAdd(int xPosition, int yPosition, unsigned char threshold);
 			bool isValidPixel(int xPosition, int yPosition, unsigned char theshold);
 			int filterComponentsBySize(int minSize, int maxSize);
-			bool writeComponents(const std::string & outFileName);
+			bool writeComponents(const std::string outFileName);
 			int getLargestSize(void) const;
 			int getSmallestSize(void) const;
 			void printComponentData(const ConnectedComponent & theComponent) const;
