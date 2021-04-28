@@ -23,6 +23,7 @@ namespace MQTZON001{
             void writeToFile(std::ofstream & outputFile);
 			int getComponentId();
 			int getPixelCount(void);
+            std::vector<std::pair<int,int>> getPixelIndexes(void);
 			void setPixelCount(int);
 			void incrementPixelCount(void);
 			void setComponentId(int no);

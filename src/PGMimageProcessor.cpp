@@ -246,19 +246,29 @@ must be returned.
         outputFile << "P5" << std::endl;
         outputFile << rows << " " << cols << std::endl;
         outputFile << "255" << std::endl;
+
         //std::ofstream & outputLocation = &outputFile;
 
-        for(int  row = 0; row < rows; ++row){
-            components[row].writeToFile(outputFile);
-            /*if(imageArray[row][col] >= threshold){
-                outputFile << (unsigned char)0;
-            }
-            else{
-                outputFile << (unsigned char)255;
-            }
-
-            //outputFile.write((char*)imageArray[row],cols);*/
+        unsigned char ** componentsArray = new unsigned char*[rows];
+        for(int i = 0; i < rows;i++){
+            componentsArray[i] = new unsigned char[cols];		//for each of the rows add cols
         }
+        for(int  i = 0; i < componentCount; ++i){
+            //outputFile.write(char line[cols],cols);
+            //outputFile << (unsigned char)0;
+            //components[i].writeToFile(outputFile);
+            for(std::pair<int,int> currentPair : components[i].getPixelIndexes()){
+                componentsArray[currentPair.first][currentPair.second] = (unsigned char)255;
+            }
+        }
+        for (int row = 0; row < rows; ++row) {
+            outputFile.write((char*)componentsArray[row],cols);
+            /*for (int col = 0; col < cols; ++col) {
+                outputFile << componentsArray[row][cols];
+            }*/
+        }
+        //std::cout<< components[0].pixelIndexes.size() << "picacellsz" << std::endl;
+
         outputFile.close();
 		return false;
 	}

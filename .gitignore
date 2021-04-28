@@ -5,3 +5,6 @@ tag.txt
 *.pdf
 MQTZON001_Assignment1.tar.gz
 /.idea
+/cmake-build-debug  
+CMakeLists.txt
+main.cpp

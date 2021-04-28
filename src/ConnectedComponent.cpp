@@ -63,16 +63,33 @@ namespace MQTZON001 {
 	}
 	void ConnectedComponent::writeToFile(std::ofstream & outputFile){
         //outputFile("dump_files/connectedComponents.pgm", std::ios::binary);
-	    std::cout << "Entering writeToFile" << std::endl;
-        for(std::pair<int,int> pixelPair : pixelIndexes){
-            	outputFile << (unsigned char)255;
-	    }
+	    /*std::cout << "Entering writeToFile" << std::endl;
+        //std::vector<std::pair<int,int>>::const_iterator it = pixelIndexes.begin(); it != pixelIndexes.end();++it
+        for(int i = 0; i < pixelCount;++i){
+            int row = pixelIndexes[i].first;
+            int col = pixelIndexes[i].second;
+            int currentIndex = outputFile.xalloc() - 4;
+            int oneDIndex = row * 640 + col;
+            if(oneDIndex == currentIndex){
+                outputFile << (unsigned char)255;
+                std::cout << "Hit Pixel"<< std::endl;
+            }
+            else{
+                outputFile << (unsigned char)0;
+                //std::cout << outputFile.xalloc() - 4<< std::endl;
+            }
+
+	    }*/
 	}
+	//outputFile.close();
 	int ConnectedComponent::getComponentId(){
 		return componentId;
 	}
 	int ConnectedComponent::getPixelCount(void){
 		return pixelCount;
+	}
+    std::vector<std::pair<int,int>> ConnectedComponent::getPixelIndexes(){
+	    return pixelIndexes;
 	}
 	void ConnectedComponent::setPixelCount(int count){
 		pixelCount = count;
