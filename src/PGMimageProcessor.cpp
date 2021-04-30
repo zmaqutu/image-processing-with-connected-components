@@ -22,26 +22,26 @@ namespace MQTZON001 {
 		dy[0] = 0;
 		dy[1] = 1;
 		dy[2] = 0;
-                dy[3] = -1;
+		dy[3] = -1;
 	}
 	//other constructor
 	PGMimageProcessor::PGMimageProcessor(std::string imageFileName) 
 		: fileName(imageFileName),imageArray(nullptr),rows(0),cols(0),componentCount(0),distance(nullptr),visited(nullptr)
-		  ,dx(new int[4]),dy(new int[4])
+		,dx(new int[4]),dy(new int[4])
 	{
 		//dx = {-1,0,1,0};
                 //dy = {0,1,0,-1};
 		//dx = {-1,0,1,0};
-                dx[0] = -1;
-                dx[1] = 0;
-                dx[2] = 1;
-                dx[3] = 0;
+		dx[0] = -1;
+		dx[1] = 0;
+		dx[2] = 1;
+		dx[3] = 0;
 
-                //dy = {0,1,0,-1};
-                dy[0] = 0;
-                dy[1] = 1;
-                dy[2] = 0;
-                dy[3] = -1;
+		//dy = {0,1,0,-1};
+		dy[0] = 0;
+		dy[1] = 1;
+		dy[2] = 0;
+		dy[3] = -1;
 		read_from_file();
 	}
 	//destructor
@@ -131,7 +131,7 @@ namespace MQTZON001 {
 		}
 		outputFile.close();
 
-		extractComponents(180,20);
+		extractComponents(120,30);
 		std::cout << "There are " << components.size() << " components"<< std::endl;
 
 
@@ -148,7 +148,7 @@ must be returned.
 	 */
 	int PGMimageProcessor::extractComponents(unsigned char threshold, int minValidSize){
 		std::vector<ConnectedComponent> extractedComponents;
-	    for(int row = 0; row < rows; row++){
+		for(int row = 0; row < rows; row++){
 			for(int col = 0; col < cols; col++){
 				if(isValidPixel(row,col,threshold)){
 					bfsAdd(row,col,threshold);		//this applies bfs starting from location y,x
@@ -156,32 +156,30 @@ must be returned.
 			}
 			//TODO free the space the image is occupying
 		}
-        for (unsigned int i = 0; i < components.size(); ++i) {
-            if(components[i].getPixelCount() > minValidSize){
-                extractedComponents.push_back(components[i]);
-            }
-        }
+		for (unsigned int i = 0; i < components.size(); ++i) {
+			if(components[i].getPixelCount() > minValidSize){
+				extractedComponents.push_back(components[i]);
+			}
+		}
 		std::ofstream outputFile("dump_files/output.pgm", std::ios::binary);
 
-                outputFile << "P5" << std::endl;
-                outputFile << rows << " " << cols << std::endl;
-                outputFile << "255" << std::endl;
-
-                for(int row = 0; row < rows; row++){
-                        for(int col = 0; col < cols;col++){
-                                if(imageArray[row][col] >= threshold){
-                                        outputFile << (unsigned char)0;
-                                }       
-                                else{
-                                        outputFile << (unsigned char)255;
-                                }       
-                        }       
-                        //outputFile.write((char*)imageArray[row],cols);
-                }
-                outputFile.close();
-                std::cout << extractedComponents.size() << " components are larger than "
-                << minValidSize << " pixels"<< std::endl;
-        writeComponents("RandomText");
+		outputFile << "P5" << std::endl;
+		outputFile << rows << " " << cols << std::endl;
+		outputFile << "255" << std::endl;
+		for(int row = 0; row < rows; row++){
+			for(int col = 0; col < cols;col++){
+				if(imageArray[row][col] >= threshold){
+					outputFile << (unsigned char)255;
+				}
+				else{
+					outputFile << (unsigned char)0;
+				}
+			}
+			//outputFile.write((char*)imageArray[row],cols);
+		}
+		outputFile.close();
+		std::cout << extractedComponents.size() << " components are larger than "  << minValidSize << " pixels"<< std::endl;
+		writeComponents("RandomText");
 		return extractedComponents.size();
 	}
 	//this method applies bfs and adds each foreground pixel found to a set
@@ -195,7 +193,6 @@ must be returned.
 		componentCount++;
 		//ConnectedComponent component(componentCount,row,col);
 		ConnectedComponent component = ConnectedComponent(componentCount,row,col);
-
 
 		while(!pixelQueue.empty()){
 			int currentRow = pixelQueue.front().first;		//returns the x value in the pair at the front of queue
@@ -219,7 +216,7 @@ must be returned.
 			}
 		}
 		//add connectedComponent to container of connectedComponents only if pixelCount > minimum valid size
-        components.push_back(component);
+		components.push_back(component);
 		return;
 	}
 	bool PGMimageProcessor::isValidPixel(int row,int col, unsigned char threshold){
@@ -229,47 +226,57 @@ must be returned.
 		
 		return true;
 	}
+	/**
+	 * this method iterates though the container of connected
+	 * components and filters out (removes) all the components which do not
+	 * obey the size criteria pass as arguments. The number remaining
+	 * after this operation is returned.
+	 * @param minSize
+	 * @param maxSize
+	 * @return
+	 */
 	int PGMimageProcessor::filterComponentsBySize(int minSize, int maxSize){
-        int filteredComponentSize = 0;
-        for (unsigned int i = 0; i < components.size(); ++i) {
-            int componentSize = components[i].getPixelCount();
-            if(componentSize > minSize && componentSize < minSize){
-                filteredComponentSize++;
-            }
-        }
-	    return filteredComponentSize;
+		int filteredComponentSize = 0;
+		for (std::vector<ConnectedComponent>::iterator it = components.begin();
+		  it != components.end(); ++it) {
+			//int componentSize = components[*it].getPixelCount();
+			int componentSize = (*it).getPixelCount();
+			if(componentSize > minSize && componentSize < minSize){
+				filteredComponentSize++;
+			}
+		}
+		return filteredComponentSize;
 	}
 	bool PGMimageProcessor::writeComponents(const std::string outFileName){
-        std::ofstream outputFile("dump_files/connectedComponents.pgm", std::ios::binary);
-
-        //std::ofstream & outputFile;
-        outputFile << "P5" << std::endl;
-        outputFile << rows << " " << cols << std::endl;
-        outputFile << "255" << std::endl;
-
-        //std::ofstream & outputLocation = &outputFile;
-
-        unsigned char ** componentsArray = new unsigned char*[rows];
-        for(int i = 0; i < rows;i++){
-            componentsArray[i] = new unsigned char[cols];		//for each of the rows add cols
-        }
-        for(int  i = 0; i < componentCount; ++i){
-            //outputFile.write(char line[cols],cols);
-            //outputFile << (unsigned char)0;
-            //components[i].writeToFile(outputFile);
-            for(std::pair<int,int> currentPair : components[i].getPixelIndexes()){
-                componentsArray[currentPair.first][currentPair.second] = (unsigned char)255;
-            }
-        }
-        for (int row = 0; row < rows; ++row) {
-            outputFile.write((char*)componentsArray[row],cols);
-            /*for (int col = 0; col < cols; ++col) {
-                outputFile << componentsArray[row][cols];
-            }*/
-        }
-        //std::cout<< components[0].pixelIndexes.size() << "picacellsz" << std::endl;
-
-        outputFile.close();
+		std::ofstream outputFile("dump_files/connectedComponents.pgm", std::ios::binary);
+		//std::ofstream & outputFile;
+		outputFile << "P5" << std::endl;
+		outputFile << rows << " " << cols << std::endl;
+		outputFile << "255" << std::endl;
+		//std::ofstream & outputLocation = &outputFile;
+		unsigned char ** componentsArray = new unsigned char*[rows];
+		for(int row = 0; row < rows;++row){
+			componentsArray[row] = new unsigned char[cols];		//for each of the rows add cols
+			for (int col = 0; col < cols; ++col) {
+				componentsArray[row][col] = (unsigned char)0;
+			}
+		}
+		for(int  i = 0; i < componentCount; ++i){
+			//outputFile.write(char line[cols],cols);
+			// outputFile << (unsigned char)0;
+			// components[i].writeToFile(outputFile);
+			for(std::pair<int,int> currentPair : components[i].getPixelIndexes()){
+				componentsArray[currentPair.first][currentPair.second] = (unsigned char)255;
+			}
+		}
+		for (int row = 0; row < rows; ++row) {
+			//outputFile.write((char*)componentsArray[row],cols);
+			for (int col = 0; col < cols; ++col) {
+				outputFile << (unsigned char)componentsArray[row][col];
+			}
+		}
+		//std::cout<< components[0].pixelIndexes.size() << "picacellsz" << std::endl;
+		outputFile.close();
 		return false;
 	}
 	int PGMimageProcessor::getLargestSize(void) const {

@@ -14,6 +14,7 @@ OBJECTS=$(SOURCES:.cpp=.o)
 
 default: $(OBJECTS)
 	$(CC)  $(SOURCES) -o build/findComp -std=c++2a -Wall
+#	@xdg-open dump_files/connectedComponents.pgm
 #	echo "Compiled Successfully. Exe file in build folder"
 #	sudo cp $(SRCDIR)/*.o /$(BINDIR)
 #	$<

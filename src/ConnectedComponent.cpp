@@ -48,8 +48,8 @@ namespace MQTZON001 {
 		if(this != &rhs){
 			pixelIndexes.clear();				//make sure its not pointing to anything before writing to it
 			pixelIndexes = std::move(rhs.pixelIndexes);
-			setComponentId(0);				//release the resource set it to point to nothing
-			setPixelCount(0);
+			setComponentId(-1);				//release the resource set it to point to nothing
+			setPixelCount(-1);
 			//add delete to free up where the current set is pointing to
 			componentId = rhs.componentId;
 			pixelCount = rhs.pixelCount;
