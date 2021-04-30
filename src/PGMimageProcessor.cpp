@@ -25,7 +25,7 @@ namespace MQTZON001 {
 		dy[3] = -1;
 	}
 	//other constructor
-	PGMimageProcessor::PGMimageProcessor(std::string imageFileName) 
+	PGMimageProcessor::PGMimageProcessor(std::string imageFileName)
 		: fileName(imageFileName),imageArray(nullptr),rows(0),cols(0),componentCount(0),distance(nullptr),visited(nullptr)
 		,dx(new int[4]),dy(new int[4])
 	{
@@ -122,7 +122,7 @@ namespace MQTZON001 {
 		}*/
 		file.close();
 
-		std::ofstream outputFile("dump_files/bab.pgm", std::ios::binary);
+		/*std::ofstream outputFile("dump_files/bab.pgm", std::ios::binary);
 
 		outputFile << "P5" << std::endl;
 		outputFile << rows << " " << cols << std::endl;
@@ -136,12 +136,12 @@ namespace MQTZON001 {
 				else{
 					outputFile << 0;
 				}
-			}*/
+			}
 			outputFile.write((char*)imageArray[row],cols);
 		}
-		outputFile.close();
+		outputFile.close();*/
 
-		extractComponents(120,30);
+		//extractComponents((unsigned char)thresh,minVal);
 		std::cout << "There are " << components.size() << " components"<< std::endl;
 
 
@@ -189,7 +189,7 @@ must be returned.
 		}
 		outputFile.close();
 		std::cout << extractedComponents.size() << " components are larger than "  << minValidSize << " pixels"<< std::endl;
-		writeComponents("RandomText");
+		//writeComponents("RandomText");
 		return extractedComponents.size();
 	}
 	//this method applies bfs and adds each foreground pixel found to a set
@@ -288,18 +288,23 @@ must be returned.
 		}
 		//std::cout<< components[0].pixelIndexes.size() << "picacellsz" << std::endl;
 		outputFile.close();
-		for (int i = 1573; i < 1583; ++i) {
-			std::cout << components[i].getPixelCount() << std::endl;
+		for (unsigned int i = 0; i < components.size(); ++i) {
+			std::cout << components[i].getPixelCount() << " -------- " << components[i].getComponentId() << std::endl;
 		}
+		std::cout << getLargestSize()  << " is the largest" << std::endl;
+		std::cout << getSmallestSize() << " is the smallest" << std::endl;
 		return false;
 	}
 
-	int PGMimageProcessor::getLargestSize(void) const {
-		return -1;
+	int PGMimageProcessor::getLargestSize(void) {
+		//return (*components.end()).getComponentId();
+		return components[components.size() - 1].getComponentId();
 	}
-	int PGMimageProcessor::getSmallestSize(void) const{
-		return -1;
+	int PGMimageProcessor::getSmallestSize(void){
+		return (*components.begin()).getComponentId();
 	}
-	void PGMimageProcessor::printComponentData(const ConnectedComponent & theComponent) const{
+	void PGMimageProcessor::printComponentData(ConnectedComponent & theComponent) const{
+		std::cout << theComponent.getComponentId() << std::endl;
+		std::cout << theComponent.getPixelCount() << std::endl;
 	}
 }
