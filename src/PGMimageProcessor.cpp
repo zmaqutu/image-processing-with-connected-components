@@ -279,6 +279,17 @@ must be returned.
 		outputFile.close();
 		return false;
 	}
+	/**
+	 * this method will return true if lhs is smaller (however we choose to define smaller) than rhs
+	 * the method will return false if lhs is not smaller than rhs
+	 * in this method lhs is smaller than rhs if it has less pixels than rhs
+	 * @param lhs
+	 * @param rhs
+	 * @return
+	 */
+	bool PGMimageProcessor::compareComponents(const ConnectedComponent & lhs, const ConnectedComponent & rhs){
+		return lhs->pixelCount() < rhs->pixelCount();
+	}
 	int PGMimageProcessor::getLargestSize(void) const {
 		return -1;
 	}
