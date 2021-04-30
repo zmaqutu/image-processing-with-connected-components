@@ -35,11 +35,11 @@ namespace MQTZON001{
 			void bfsAdd(int xPosition, int yPosition, unsigned char threshold);
 			bool isValidPixel(int xPosition, int yPosition, unsigned char theshold);
 			int filterComponentsBySize(int minSize, int maxSize);
-			bool writeComponents(const std::string outFileName);
+			bool writeComponents(std::string outFileName);
 			//bool compareComponents(const ConnectedComponent & lhs, const ConnectedComponent & rhs);
 			int getLargestSize(void);
 			int getSmallestSize(void);
-			void printComponentData(ConnectedComponent & theComponent) const;
+			void printComponentData(void);
 	};
 }
 #endif

@@ -30,10 +30,11 @@ int main(int argc, char * argv[]){
 		MQTZON001::PGMimageProcessor instance(fileName);
 		instance.extractComponents((unsigned char)threshold, minValid);
 		instance.writeComponents(outputFileName);
+		
 		std::cout << threshold << " this the thresh" << std::endl;
 	}
 	//no p flag but w flag
-	if(argc == 9 && argv[6] == "-w"){
+	if(argc == 9 && std::string(argv[6]) == "-w"){
 		std::string sFlag = argv[1];
 		minValid = std::atoi(argv[2]);
 		maxValid = std::atoi(argv[3]);
@@ -42,9 +43,13 @@ int main(int argc, char * argv[]){
 		std::string wFlag = argv[6];	
 		std::string outputFileName = argv[7];
 		std::string fileName = argv[8];
+		MQTZON001::PGMimageProcessor instance(fileName);
+		instance.extractComponents((unsigned char)threshold, minValid);
+                instance.writeComponents(outputFileName);
+                std::cout << threshold << " this the thresh" << std::endl;
 	}
 	//no w flag but p flag
-	if(argc == 8 && argv[6] == "-p"){
+	if(argc == 8 && std::string(argv[6]) == "-p"){
 		std::string sFlag = argv[1];
 		minValid = (unsigned char)*argv[2];
 		maxValid = (unsigned char)*argv[3];
@@ -52,6 +57,9 @@ int main(int argc, char * argv[]){
 		threshold = (unsigned char)*argv[5];
 		std::string wFlag = argv[6];
 		std::string fileName = argv[7];
+		MQTZON001::PGMimageProcessor instance(fileName);
+                instance.extractComponents((unsigned char)threshold, minValid);
+                instance.printComponentData();
 	}
 	//runThis();
 	return 0;

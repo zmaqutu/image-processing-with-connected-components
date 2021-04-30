@@ -95,7 +95,6 @@ namespace MQTZON001 {
 		//std::unique_ptr<std::unique_ptr<int[]> d(new std::unique_ptr<int[]>[rows]);
 		//visited(new std::unique_ptr<int[]>[rows]);
 
-		std::cout << rows << "," << cols << std::endl;
 
 		std::getline(file,line);					//read 255
 		//TODO change these 2D arrays to use smart pointers
@@ -129,7 +128,7 @@ namespace MQTZON001 {
 		outputFile << "255" << std::endl;
 
 		for(int row = 0; row < rows; row++){
-			/*for(int col = 0; col < cols;col++){
+			for(int col = 0; col < cols;col++){
 				if(imageArray[row][col] >= threshold){
 					outputFile << 255;
 				}
@@ -156,7 +155,7 @@ must be returned.
 	 * @param minValidSize -
 	 * @return - the number of components larger than minValidSize pixels
 	 */
-	int PGMimageProcessor::extractComponents(unsigned char threshold, int minValidSize){
+	int PGMimageProcessor::extractComponents(unsigned char threshold , int minValidSize){
 		std::vector<ConnectedComponent> extractedComponents;
 		for(int row = 0; row < rows; row++){
 			for(int col = 0; col < cols; col++){
@@ -258,8 +257,9 @@ must be returned.
 		}
 		return filteredComponentSize;
 	}
-	bool PGMimageProcessor::writeComponents(const std::string outFileName){
-		std::ofstream outputFile("dump_files/connectedComponents.pgm", std::ios::binary);
+	bool PGMimageProcessor::writeComponents(std::string outFileName){
+		outFileName = "output_files/" + outFileName;
+		std::ofstream outputFile(outFileName, std::ios::binary);
 		//std::ofstream & outputFile;
 		outputFile << "P5" << std::endl;
 		outputFile << rows << " " << cols << std::endl;
@@ -288,11 +288,11 @@ must be returned.
 		}
 		//std::cout<< components[0].pixelIndexes.size() << "picacellsz" << std::endl;
 		outputFile.close();
-		for (unsigned int i = 0; i < components.size(); ++i) {
-			std::cout << components[i].getPixelCount() << " -------- " << components[i].getComponentId() << std::endl;
-		}
-		std::cout << getLargestSize()  << " is the largest" << std::endl;
-		std::cout << getSmallestSize() << " is the smallest" << std::endl;
+		//for (unsigned int i = 0; i < components.size(); ++i) {
+		//	std::cout << components[i].getPixelCount() << " -------- " << components[i].getComponentId() << std::endl;
+		//}
+		//std::cout << getLargestSize()  << " is the largest" << std::endl;
+		//std::cout << getSmallestSize() << " is the smallest" << std::endl;
 		return false;
 	}
 
@@ -303,8 +303,11 @@ must be returned.
 	int PGMimageProcessor::getSmallestSize(void){
 		return (*components.begin()).getComponentId();
 	}
-	void PGMimageProcessor::printComponentData(ConnectedComponent & theComponent) const{
-		std::cout << theComponent.getComponentId() << std::endl;
-		std::cout << theComponent.getPixelCount() << std::endl;
+	void PGMimageProcessor::printComponentData(void){
+		for(std::vector<ConnectedComponent>::iterator it = components.begin();
+                  it != components.end(); ++it){
+			std::cout << (*it).getComponentId() << std::endl;
+			std::cout << (*it).getPixelCount() << std::endl;
+		}
 	}
 }
