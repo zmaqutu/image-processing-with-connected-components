@@ -63,9 +63,19 @@ namespace MQTZON001 {
 	int PGMimageProcessor::getComponentCount(void) const {
 		return componentCount;
 	}
-	/*void PGMimageProcessor::setId(int containerId){
-		id = containerId;
-	}*/
+	/**
+	 * this method will return true if lhs is smaller (however we choose to define smaller) than rhs
+	 * the method will return false if lhs is not smaller than rhs
+	 * in this method lhs is smaller than rhs if it has less pixels than rhs
+	 * @param lhs
+	 * @param rhs
+	 * @return
+	 */
+	struct compareComponents {
+		bool operator()(ConnectedComponent & lhs,ConnectedComponent & rhs) const {
+			return lhs.getPixelCount() < rhs.getPixelCount();
+		}
+	};
 	void PGMimageProcessor::read_from_file(){
 		std::ifstream file(fileName, std::ios::binary);
 		std::string line;
@@ -217,6 +227,7 @@ must be returned.
 		}
 		//add connectedComponent to container of connectedComponents only if pixelCount > minimum valid size
 		components.push_back(component);
+		std::sort(components.begin(),components.end(), compareComponents());
 		return;
 	}
 	bool PGMimageProcessor::isValidPixel(int row,int col, unsigned char threshold){
@@ -277,19 +288,12 @@ must be returned.
 		}
 		//std::cout<< components[0].pixelIndexes.size() << "picacellsz" << std::endl;
 		outputFile.close();
+		for (int i = 1573; i < 1583; ++i) {
+			std::cout << components[i].getPixelCount() << std::endl;
+		}
 		return false;
 	}
-	/**
-	 * this method will return true if lhs is smaller (however we choose to define smaller) than rhs
-	 * the method will return false if lhs is not smaller than rhs
-	 * in this method lhs is smaller than rhs if it has less pixels than rhs
-	 * @param lhs
-	 * @param rhs
-	 * @return
-	 */
-	bool PGMimageProcessor::compareComponents(const ConnectedComponent & lhs, const ConnectedComponent & rhs){
-		return lhs->pixelCount() < rhs->pixelCount();
-	}
+
 	int PGMimageProcessor::getLargestSize(void) const {
 		return -1;
 	}
