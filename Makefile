@@ -21,7 +21,12 @@ default: $(OBJECTS)
 
 
 # other rule; invoked by make clean etc 
-
+runWriteOnly:
+	./build/findComp -s 10 100 -t 150 -w output.pgm ./data/baboon.pgm
+runPrintAllComponents:
+		./build/findComp -s 10 100 -t 150 -p ./data/coins.pgm
+runAllArguments:
+	./build/findComp -s 11 100 -t 150 -p -w output.pgm ./data/ladyzhenskaya.pgm
 # deletes all the object code files
 clean:
 	@rm -f $(SRCDIR)/*.o

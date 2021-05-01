@@ -39,7 +39,8 @@ namespace MQTZON001{
 			//bool compareComponents(const ConnectedComponent & lhs, const ConnectedComponent & rhs);
 			int getLargestSize(void);
 			int getSmallestSize(void);
-			void printComponentData(void);
+			void printComponentData(ConnectedComponent & theComponent);
+			void printAllComponentData(void);
 	};
 }
 #endif

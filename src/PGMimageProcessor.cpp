@@ -30,6 +30,7 @@ namespace MQTZON001 {
 		,dx(new int[4]),dy(new int[4])
 	{
 		//dx = {-1,0,1,0};
+	
                 //dy = {0,1,0,-1};
 		//dx = {-1,0,1,0};
 		dx[0] = -1;
@@ -96,7 +97,7 @@ namespace MQTZON001 {
 		//visited(new std::unique_ptr<int[]>[rows]);
 
 
-		std::getline(file,line);					//read 255
+		std::getline(file,line);					//read 259
 		//TODO change these 2D arrays to use smart pointers
 		imageArray = new unsigned char*[rows];				
 		distance = new  int*[rows];
@@ -141,9 +142,6 @@ namespace MQTZON001 {
 		outputFile.close();*/
 
 		//extractComponents((unsigned char)thresh,minVal);
-		std::cout << "There are " << components.size() << " components"<< std::endl;
-
-
 	}
 	/**
 	 * this method processes the input image to extract all the connected components,
@@ -303,11 +301,17 @@ must be returned.
 	int PGMimageProcessor::getSmallestSize(void){
 		return (*components.begin()).getComponentId();
 	}
-	void PGMimageProcessor::printComponentData(void){
+	void PGMimageProcessor::printComponentData(ConnectedComponent & theComponent){
+		std::cout << "Component ID: " << theComponent.getComponentId() <<  " ";
+		std::cout << "has " << theComponent.getPixelCount() << " pixels" <<std::endl;
+	}
+	void PGMimageProcessor::printAllComponentData(void){
+		std::cout << "Printing all component data" << std::endl;
 		for(std::vector<ConnectedComponent>::iterator it = components.begin();
-                  it != components.end(); ++it){
-			std::cout << (*it).getComponentId() << std::endl;
-			std::cout << (*it).getPixelCount() << std::endl;
-		}
+		  it != components.end(); ++it)
+		{
+			printComponentData(*it);
+                }
+		std::cout << "Component details printed above" << std::endl;
 	}
 }

@@ -10,7 +10,7 @@ void runThis(){
 }
 
 int main(int argc, char * argv[]){
-	int minValid, maxValid,threshold = 0;
+	int minValid, threshold = 0;
 	//all flags are present
 	if(argc < 8 ){
 		std::cout << "The input format provided is incorrect, please provide the correct input arguments" << std::endl;
@@ -20,7 +20,7 @@ int main(int argc, char * argv[]){
 	if(argc == 10){
 		std::string sFlag = argv[1];
 		minValid = std::atoi(argv[2]);
-		maxValid = std::atoi(argv[3]);
+		//maxValid = std::atoi(argv[3]);
 		std::string tFlag = argv[4];
 		threshold = std::atoi(argv[5]);
 		std::string pFlag = argv[6];
@@ -30,14 +30,14 @@ int main(int argc, char * argv[]){
 		MQTZON001::PGMimageProcessor instance(fileName);
 		instance.extractComponents((unsigned char)threshold, minValid);
 		instance.writeComponents(outputFileName);
+		std::cout << "Output file created inside output_files/" << outputFileName << std::endl;
 		
-		std::cout << threshold << " this the thresh" << std::endl;
 	}
 	//no p flag but w flag
 	if(argc == 9 && std::string(argv[6]) == "-w"){
 		std::string sFlag = argv[1];
 		minValid = std::atoi(argv[2]);
-		maxValid = std::atoi(argv[3]);
+		//maxValid = std::atoi(argv[3]);
 		std::string tFlag = argv[4];
 		threshold = std::atoi(argv[5]);
 		std::string wFlag = argv[6];	
@@ -46,20 +46,20 @@ int main(int argc, char * argv[]){
 		MQTZON001::PGMimageProcessor instance(fileName);
 		instance.extractComponents((unsigned char)threshold, minValid);
                 instance.writeComponents(outputFileName);
-                std::cout << threshold << " this the thresh" << std::endl;
+		std::cout << "Output file created inside output_files/" << outputFileName << std::endl;
 	}
 	//no w flag but p flag
 	if(argc == 8 && std::string(argv[6]) == "-p"){
 		std::string sFlag = argv[1];
-		minValid = (unsigned char)*argv[2];
-		maxValid = (unsigned char)*argv[3];
+		minValid = std::atoi(argv[2]);
+		//maxValid = std:atoi(argv[3]);
 		std::string tFlag = argv[4];
-		threshold = (unsigned char)*argv[5];
+		threshold = std::atoi(argv[5]);
 		std::string wFlag = argv[6];
 		std::string fileName = argv[7];
 		MQTZON001::PGMimageProcessor instance(fileName);
                 instance.extractComponents((unsigned char)threshold, minValid);
-                instance.printComponentData();
+                instance.printAllComponentData();
 	}
 	//runThis();
 	return 0;
