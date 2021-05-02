@@ -140,41 +140,13 @@ must be returned.
 			}
 			//TODO free the space the image is occupying
 		}
+		std::sort(components.begin(),components.end(), compareComponents());
 		for (unsigned int i = 0; i < components.size(); ++i) {
 			if(components[i].getPixelCount() > minValidSize){
 				extractedComponents.push_back(components[i]);
 			}
 		}
-		std::ofstream outputFile("dump_files/output.pgm", std::ios::binary);
-
-		outputFile << "P5" << std::endl;
-		outputFile << rows << " " << cols << std::endl;
-		outputFile << "255" << std::endl;
-
-		
-		unsigned char ** testArray = new unsigned char*[rows];
-                for(int row = 0; row < rows;++row){
-                        testArray[row] = new unsigned char[cols];         //for each of the rows add cols
-                        for (int col = 0; col < cols; ++col) {
-                                testArray[row][col] = (unsigned char)0;
-                        }
-                }
-		for(unsigned int i = 0; i < extractedComponents.size(); ++i){
-			for(std::pair<int,int> currentPair : extractedComponents[i].getPixelIndexes()){
-				testArray[currentPair.first][currentPair.second] = (unsigned char)255;
-			}
-		}
-
-		for (int row = 0; row < rows; ++row) {
-                        //outputFile.write((char*)componentsArray[row],cols);
-                        for (int col = 0; col < cols; ++col) {
-                                outputFile << (unsigned char)testArray[row][col];
-                        }
-                }
-
-		outputFile.close();
 		std::cout << extractedComponents.size() << " components are larger than "  << minValidSize << " pixels"<< std::endl;
-		//writeComponents("RandomText");
 		return extractedComponents.size();
 	}
 	//this method applies bfs and adds each foreground pixel found to a set
@@ -184,10 +156,9 @@ must be returned.
 
 		visited[row][col] = 1;
 		distance[row][col] = 0;
-		//TODO create a connectedComponent
+		//create a connectedComponent
 		componentCount++;
-		//ConnectedComponent component(componentCount,row,col);
-		ConnectedComponent component = ConnectedComponent(componentCount,row,col);
+		ConnectedComponent component(componentCount,row,col);
 
 		while(!pixelQueue.empty()){
 			int currentRow = pixelQueue.front().first;		//returns the x value in the pair at the front of queue
@@ -202,7 +173,6 @@ must be returned.
 					int nextCol = currentCol + dx[i];
 
 					pixelQueue.push({nextRow,nextCol});
-					//visited[currentRow][currentCol] = 1;
 					visited[nextRow][nextCol] = 1;
 					//TODO add x and y to set then add set will be moved to connectedComponent after loop terminates
 					distance[nextRow][nextCol] = distance[currentRow][currentCol] + 1;
@@ -212,7 +182,6 @@ must be returned.
 		}
 		//add connectedComponent to container of connectedComponents only if pixelCount > minimum valid size
 		components.push_back(component);
-		std::sort(components.begin(),components.end(), compareComponents());
 		return;
 	}
 	bool PGMimageProcessor::isValidPixel(int row,int col, unsigned char threshold){
@@ -235,7 +204,6 @@ must be returned.
 		int filteredComponentSize = 0;
 		for (std::vector<ConnectedComponent>::iterator it = components.begin();
 		  it != components.end(); ++it) {
-			//int componentSize = components[*it].getPixelCount();
 			int componentSize = (*it).getPixelCount();
 			if(componentSize > minSize && componentSize < minSize){
 				filteredComponentSize++;
@@ -246,11 +214,11 @@ must be returned.
 	bool PGMimageProcessor::writeComponents(std::string outFileName){
 		outFileName = "output_files/" + outFileName;
 		std::ofstream outputFile(outFileName, std::ios::binary);
-		//std::ofstream & outputFile;
+		
 		outputFile << "P5" << std::endl;
 		outputFile << rows << " " << cols << std::endl;
 		outputFile << "255" << std::endl;
-		//std::ofstream & outputLocation = &outputFile;
+		
 		unsigned char ** componentsArray = new unsigned char*[rows];
 		for(int row = 0; row < rows;++row){
 			componentsArray[row] = new unsigned char[cols];		//for each of the rows add cols
@@ -268,13 +236,7 @@ must be returned.
 				outputFile << (unsigned char)componentsArray[row][col];
 			}
 		}
-		//std::cout<< components[0].pixelIndexes.size() << "picacellsz" << std::endl;
 		outputFile.close();
-		//for (unsigned int i = 0; i < components.size(); ++i) {
-		//	std::cout << components[i].getPixelCount() << " -------- " << components[i].getComponentId() << std::endl;
-		//}
-		//std::cout << getLargestSize()  << " is the largest" << std::endl;
-		//std::cout << getSmallestSize() << " is the smallest" << std::endl;
 		return false;
 	}
 
