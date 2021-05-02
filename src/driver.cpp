@@ -2,12 +2,6 @@
 #include <string>
 
 #include "PGMimageProcessor.h"
-void runThis(){
-	//MQTZON001::PGMimageProcessor instance("data/chess.pgm");
-	//MQTZON001::PGMimageProcessor instance = MQTZON001::PGMimageProcessor("data/baboon.pgm");
-	//std::cout << instance.getId() << std::endl;
-	//instance.read_from_file("sloan_image.pgm");
-}
 
 int main(int argc, char * argv[]){
 	int minValid, threshold = 0;
@@ -61,6 +55,5 @@ int main(int argc, char * argv[]){
                 instance.extractComponents((unsigned char)threshold, minValid);
                 instance.printAllComponentData();
 	}
-	//runThis();
 	return 0;
 }

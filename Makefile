@@ -1,4 +1,4 @@
-# This is a Makefile comment
+#ke This is a Makefile comment
 
 # Declare some variables to help construct our compile command
 CC=g++         # the compiler
@@ -24,7 +24,7 @@ default: $(OBJECTS)
 runWriteOnly:
 	./build/findComp -s 10 100 -t 150 -w output.pgm ./data/baboon.pgm
 runPrintAllComponents:
-		./build/findComp -s 10 100 -t 150 -p ./data/coins.pgm
+		./build/findComp -s 10 100 -t 150 -p ./data/baboon.pgm
 runAllArguments:
 	./build/findComp -s 11 100 -t 150 -p -w output.pgm ./data/ladyzhenskaya.pgm
 # deletes all the object code files

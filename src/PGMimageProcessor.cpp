@@ -50,9 +50,13 @@ namespace MQTZON001 {
 		if(imageArray != nullptr){
 			for(int i = 0; i < rows;i++){
 				delete [] imageArray[i];
+				delete [] visited[i];
+				delete [] distance[i];
 			}
 		}
 		delete [] imageArray;
+		delete [] visited;
+		delete [] distance;
 		std::cout << "Container Destroyed " << std::endl;
 	}
 	int PGMimageProcessor::getRows(){
@@ -99,11 +103,13 @@ namespace MQTZON001 {
 
 		std::getline(file,line);					//read 259
 		//TODO change these 2D arrays to use smart pointers
-		imageArray = new unsigned char*[rows];				
+		imageArray = new unsigned char*[rows];
+		//imageArray(new std::unique_ptr<unsigned char[]>[rows]);
 		distance = new  int*[rows];
 		visited = new int*[rows];
 		for(int i = 0; i < rows;i++){
 			imageArray[i] = new unsigned char[cols];		//for each of the rows add cols
+			//imageArray[i] = std::unique_ptr<unsigned char[]>(new  unsigned char [cols]);
 			distance[i] = new int[cols];
 			visited[i] = new int[cols];
 		}
@@ -112,36 +118,7 @@ namespace MQTZON001 {
 				file.read((char*)imageArray[i],cols);
 			}
 		}
-		/*for(int x = 0; x < 5;x++){
-			for(int y = 0; y < 5; y++){
-				//std::cout << imageArray[y][x] << std::endl;
-				std::cout << distance[x][y] << std::endl;
-
-
-			}
-		}*/
 		file.close();
-
-		/*std::ofstream outputFile("dump_files/bab.pgm", std::ios::binary);
-
-		outputFile << "P5" << std::endl;
-		outputFile << rows << " " << cols << std::endl;
-		outputFile << "255" << std::endl;
-
-		for(int row = 0; row < rows; row++){
-			for(int col = 0; col < cols;col++){
-				if(imageArray[row][col] >= threshold){
-					outputFile << 255;
-				}
-				else{
-					outputFile << 0;
-				}
-			}
-			outputFile.write((char*)imageArray[row],cols);
-		}
-		outputFile.close();*/
-
-		//extractComponents((unsigned char)thresh,minVal);
 	}
 	/**
 	 * this method processes the input image to extract all the connected components,
@@ -173,17 +150,28 @@ must be returned.
 		outputFile << "P5" << std::endl;
 		outputFile << rows << " " << cols << std::endl;
 		outputFile << "255" << std::endl;
-		for(int row = 0; row < rows; row++){
-			for(int col = 0; col < cols;col++){
-				if(imageArray[row][col] >= threshold){
-					outputFile << (unsigned char)255;
-				}
-				else{
-					outputFile << (unsigned char)0;
-				}
+
+		
+		unsigned char ** testArray = new unsigned char*[rows];
+                for(int row = 0; row < rows;++row){
+                        testArray[row] = new unsigned char[cols];         //for each of the rows add cols
+                        for (int col = 0; col < cols; ++col) {
+                                testArray[row][col] = (unsigned char)0;
+                        }
+                }
+		for(unsigned int i = 0; i < extractedComponents.size(); ++i){
+			for(std::pair<int,int> currentPair : extractedComponents[i].getPixelIndexes()){
+				testArray[currentPair.first][currentPair.second] = (unsigned char)255;
 			}
-			//outputFile.write((char*)imageArray[row],cols);
 		}
+
+		for (int row = 0; row < rows; ++row) {
+                        //outputFile.write((char*)componentsArray[row],cols);
+                        for (int col = 0; col < cols; ++col) {
+                                outputFile << (unsigned char)testArray[row][col];
+                        }
+                }
+
 		outputFile.close();
 		std::cout << extractedComponents.size() << " components are larger than "  << minValidSize << " pixels"<< std::endl;
 		//writeComponents("RandomText");
@@ -271,15 +259,11 @@ must be returned.
 			}
 		}
 		for(int  i = 0; i < componentCount; ++i){
-			//outputFile.write(char line[cols],cols);
-			// outputFile << (unsigned char)0;
-			// components[i].writeToFile(outputFile);
 			for(std::pair<int,int> currentPair : components[i].getPixelIndexes()){
 				componentsArray[currentPair.first][currentPair.second] = (unsigned char)255;
 			}
 		}
 		for (int row = 0; row < rows; ++row) {
-			//outputFile.write((char*)componentsArray[row],cols);
 			for (int col = 0; col < cols; ++col) {
 				outputFile << (unsigned char)componentsArray[row][col];
 			}

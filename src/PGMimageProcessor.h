@@ -10,6 +10,7 @@ namespace MQTZON001{
 		private:
 			std::string fileName;
 			unsigned char ** imageArray;
+			//std::unique_ptr<std::unique_ptr<unsigned char[]>[]> imageArray;
 			int rows, cols;
 			int componentCount;
 			std::unordered_set<std::pair<int,int>,boost::hash<std::pair<int, int>>> allForegroundPixels;
