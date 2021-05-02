@@ -13,6 +13,7 @@ namespace MQTZON001{
 			//std::unordered_set<std::pair<int,int>,boost::hash<std::pair<int, int>>> pixelIndexes;
 			std::vector<std::pair<int,int>> pixelIndexes;
 		public:
+			int boundaryCount;
 			ConnectedComponent(int id, int startRow, int startCol);
 			~ConnectedComponent();
 			ConnectedComponent(const ConnectedComponent & rhs);
@@ -23,9 +24,10 @@ namespace MQTZON001{
 			void writeToFile(std::ofstream & outputFile);
 			int getComponentId();
 			int getPixelCount(void);
+			int getBoundaryCount(void);
             std::vector<std::pair<int,int>> getPixelIndexes(void);
 			void setPixelCount(int);
-			void incrementPixelCount(void);
+			void incrementBoundaryCount(void);
 			void setComponentId(int no);
 	};
 }

@@ -12,6 +12,7 @@ namespace MQTZON001 {
 		:componentId(id),pixelCount(0)
 	{
 		pixelIndexes.push_back({startRow,startCol});
+		boundaryCount = 0;
 		pixelCount++;
 	}
 	//destructor
@@ -88,14 +89,18 @@ namespace MQTZON001 {
 	int ConnectedComponent::getPixelCount(void){
 		return pixelCount;
 	}
-    std::vector<std::pair<int,int>> ConnectedComponent::getPixelIndexes(){
+	void ConnectedComponent::incrementBoundaryCount(void){
+                boundaryCount = boundaryCount + 1;
+        }
+	int ConnectedComponent::getBoundaryCount(){
+		std::cout << boundaryCount <<std::endl;
+		return boundaryCount;
+	}
+    	std::vector<std::pair<int,int>> ConnectedComponent::getPixelIndexes(){
 	    return pixelIndexes;
 	}
 	void ConnectedComponent::setPixelCount(int count){
 		pixelCount = count;
-	}
-	void ConnectedComponent::incrementPixelCount(void){
-		pixelCount++;
 	}
 	void ConnectedComponent::setComponentId(int containerId){
 		componentId = containerId;

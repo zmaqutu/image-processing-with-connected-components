@@ -160,6 +160,8 @@ must be returned.
 		componentCount++;
 		ConnectedComponent component(componentCount,row,col);
 
+		
+		int boundaryPixels = 0;
 		while(!pixelQueue.empty()){
 			int currentRow = pixelQueue.front().first;		//returns the x value in the pair at the front of queue
 			int currentCol = pixelQueue.front().second;		//returns the y value in the pair at the front of queue
@@ -169,6 +171,7 @@ must be returned.
 				//dx = {-1,0,1,0};
 				//dy = {0,1,0,-1};
 				if(isValidPixel(currentRow + dy[i],currentCol + dx[i],threshold)){
+					boundaryPixels++;
 					int nextRow = currentRow + dy[i];
 					int nextCol = currentCol + dx[i];
 
@@ -178,6 +181,11 @@ must be returned.
 					distance[nextRow][nextCol] = distance[currentRow][currentCol] + 1;
 					component.addPixel(currentRow,currentCol);
 				}
+			}
+			//if one of the pixels are a background pixel
+			if(boundaryPixels != 4){
+				component.incrementBoundaryCount();
+				boundaryPixels = 0;
 			}
 		}
 		//add connectedComponent to container of connectedComponents only if pixelCount > minimum valid size
@@ -241,7 +249,6 @@ must be returned.
 	}
 
 	int PGMimageProcessor::getLargestSize(void) {
-		//return (*components.end()).getComponentId();
 		return components[components.size() - 1].getComponentId();
 	}
 	int PGMimageProcessor::getSmallestSize(void){
@@ -249,7 +256,8 @@ must be returned.
 	}
 	void PGMimageProcessor::printComponentData(ConnectedComponent & theComponent){
 		std::cout << "Component ID: " << theComponent.getComponentId() <<  " ";
-		std::cout << "has " << theComponent.getPixelCount() << " pixels" <<std::endl;
+		std::cout << "has " << theComponent.getPixelCount() << " pixels and "
+			<< theComponent.boundaryCount << " boundry pixels"<<std::endl;
 	}
 	void PGMimageProcessor::printAllComponentData(void){
 		std::cout << "Printing all component data" << std::endl;

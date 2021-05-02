@@ -1,4 +1,4 @@
-# Tag Enumeration
+# Image Processing with Connected Components
 
 <div align="center" >
   <img src="https://img.shields.io/badge/made%20by-Zongo%20Maqutu-blue?style=for-the-badge&labelColor=20232a" />
@@ -8,7 +8,8 @@
 </div>
 
 ## Description 
-*This C++ applicaiton parses a text file with XML tags. Sample text files are provided in the data folder*
+*This C++ applicaiton reads a greyscale PGM file and extracts the pixels that are above a user provided threshold as white pixels 
+using Bredth first search*
 
 ## How to use
 *A Makefile is provided just run the following code snippet in the root directory (where the makefile is):*
@@ -21,23 +22,30 @@ $ make
 
 *To run the program simply run* 
 ```unix
-$ ./build/target.ext {ARGS}
+$ ./build/findComp {ARGS}
 ```
 
-*Where ARGS is the name of any input file*
+*You can run some predifined sample inputs using the following run commands*
+```unix
+$ make runAllArguments  
+```
+*The run command above runs a the program with all aruments provided
+
+```unix
+$ make runWriteOnly
+```
+*The run command above only does the extraction and writes it to an output file without printing component data
+
+```unix
+$ make runPrintAllComponents
+```
+*The run command above runs the program and prints out all components data in a sorted fashion
+
+
 *To remove all binary files run*
 ```unix
 $ make clean
 ```
 
 *Here is a snippet of the user menu when you run the program*
-
-```unix
-$ r: Read and process tag file
-p: Print all tags
-d: Dump/write tags and data to a file called tag.txt
-l: List/print tag data for given tag to cout
-q: Quit
-
-Enter an option (r,p,d,l) or q to quit, and press return...
-```
+*Output files can be found in the "output_files" folder*
