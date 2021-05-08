@@ -9,11 +9,11 @@ namespace MQTZON001{
 		private:
 			int componentId;
 			int pixelCount;
+			int boundaryCount;
 			//a way to store pixels in this component an unordered set or pairs
 			//std::unordered_set<std::pair<int,int>,boost::hash<std::pair<int, int>>> pixelIndexes;
 			std::vector<std::pair<int,int>> pixelIndexes;
 		public:
-			int boundaryCount;
 			ConnectedComponent(int id, int startRow, int startCol);
 			~ConnectedComponent();
 			ConnectedComponent(const ConnectedComponent & rhs);

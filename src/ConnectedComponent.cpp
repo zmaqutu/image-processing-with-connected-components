@@ -9,10 +9,10 @@ namespace MQTZON001 {
 	/*ConnectedComponent::ConnectedComponent(){
 	}*/
 	ConnectedComponent::ConnectedComponent(int id,int startRow,int startCol)
-		:componentId(id),pixelCount(0)
+		:componentId(id),pixelCount(0),boundaryCount(0)
 	{
 		pixelIndexes.push_back({startRow,startCol});
-		boundaryCount = 0;
+		boundaryCount++;
 		pixelCount++;
 	}
 	//destructor
@@ -20,7 +20,7 @@ namespace MQTZON001 {
 		pixelIndexes.clear();
 		setPixelCount(-1);
 		setComponentId(-1);
-		//std::cout << "Component Destroyed " << std::endl;
+		//std::cout << "Component Destroyed " << boundaryCount << std::endl;
 	}
 	//copy constructor
 	ConnectedComponent::ConnectedComponent(const ConnectedComponent & rhs)
@@ -90,10 +90,11 @@ namespace MQTZON001 {
 		return pixelCount;
 	}
 	void ConnectedComponent::incrementBoundaryCount(void){
-                boundaryCount = boundaryCount + 1;
+                boundaryCount++;
+		//std::cout << boundaryCount << std::endl;
         }
 	int ConnectedComponent::getBoundaryCount(){
-		std::cout << boundaryCount <<std::endl;
+		//std::cout << boundaryCount <<std::endl;
 		return boundaryCount;
 	}
     	std::vector<std::pair<int,int>> ConnectedComponent::getPixelIndexes(){

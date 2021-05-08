@@ -185,6 +185,7 @@ must be returned.
 			//if one of the pixels are a background pixel
 			if(boundaryPixels != 4){
 				component.incrementBoundaryCount();
+				std::cout << component.getBoundaryCount() << std::endl;
 				boundaryPixels = 0;
 			}
 		}
@@ -257,13 +258,14 @@ must be returned.
 	void PGMimageProcessor::printComponentData(ConnectedComponent & theComponent){
 		std::cout << "Component ID: " << theComponent.getComponentId() <<  " ";
 		std::cout << "has " << theComponent.getPixelCount() << " pixels and "
-			<< theComponent.boundaryCount << " boundry pixels"<<std::endl;
+			<< theComponent.getBoundaryCount() << " boundry pixels"<<std::endl;
 	}
 	void PGMimageProcessor::printAllComponentData(void){
 		std::cout << "Printing all component data" << std::endl;
 		for(std::vector<ConnectedComponent>::iterator it = components.begin();
 		  it != components.end(); ++it)
 		{
+			//std::cout << (*it).boundaryCount << std::endl;
 			printComponentData(*it);
                 }
 		std::cout << "Component details printed above" << std::endl;
