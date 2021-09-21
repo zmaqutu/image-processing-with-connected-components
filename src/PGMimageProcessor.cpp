@@ -232,12 +232,12 @@ must be returned.
 		for(int row = 0; row < rows;++row){
 			componentsArray[row] = new unsigned char[cols];		//for each of the rows add cols
 			for (int col = 0; col < cols; ++col) {
-				componentsArray[row][col] = (unsigned char)0;
+				componentsArray[row][col] = (unsigned char)255; //type1-->0 type2-->255
 			}
 		}
 		for(int  i = 0; i < componentCount; ++i){
 			for(std::pair<int,int> currentPair : components[i].getPixelIndexes()){
-				componentsArray[currentPair.first][currentPair.second] = (unsigned char)255;
+				componentsArray[currentPair.first][currentPair.second] = (unsigned char)0; //type1-->255 type2 0
 			}
 		}
 		for (int row = 0; row < rows; ++row) {

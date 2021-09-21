@@ -8,6 +8,7 @@ BINDIR=bin
 INCDIR=include
 BLDDIR=build
 
+
 SOURCES = src/driver.cpp $(SRCDIR)/PGMimageProcessor.cpp $(SRCDIR)/ConnectedComponent.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 
@@ -26,7 +27,11 @@ runWriteOnly:
 runPrintAllComponents:
 		./build/findComp -s 10 100 -t 150 -p ./data/baboon.pgm
 runAllArguments:
-	./build/findComp -s 11 100 -t 150 -p -w output.pgm ./data/ladyzhenskaya.pgm
+	./build/findComp -s 11 100 -t 32 -p -w output.pgm ./data/nfts/MountainsNFT.pgm
+
+runMakeNFT:
+	./build/findComp -s 11 100 -t 150 -p -w output.pgm ./data/nfts/NFTIdea.pgm
+
 # deletes all the object code files
 clean:
 	@rm -f $(SRCDIR)/*.o

@@ -1,8 +1,11 @@
 # ignore binary files
 /build/findComp
+/output_files/nfts/
+/data/nfts/
 /src/*.o
 tag.txt
 *.pdf
+*.xz
 MQTZON001_Assignment1.tar.gz
 /.idea
 /cmake-build-debug  
